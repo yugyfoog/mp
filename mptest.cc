@@ -8,6 +8,8 @@ int size;
 
 void test_mpint() {
   mpint x;
+
+  cout << x << endl;
 }
 
 void test_mpfloat() {

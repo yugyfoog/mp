@@ -11,4 +11,6 @@ class mpfloat;
 #include "mpint.h"
 #include "mpfloat.h"
 
+std::ostream &operator << (std::ostream &, mpint const &);
+
 #endif

@@ -35,6 +35,8 @@ public:
   mpint &operator %= (unsigned long);
   mpint &operator %= (mpint const &);
 
+  std::string to_string() const;
+  
 private:
   void make_zero();
 };
