@@ -5,8 +5,11 @@
 extern "C" {
 #endif
 
+  void fast_clear(Digit *, int);
   void fast_copy(Digit *, Digit const *, int);
-  Digit fast_divide(Digit *, Digit const *, Digit, int);
+  int fast_is_zero(Digit *, int);
+  Digit fast_multiply_add(Digit *, int, Digit, Digit);
+  Digit fast_divide(Digit *, int, Digit);
   
 #ifdef __cplusplus
 };

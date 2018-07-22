@@ -10,10 +10,11 @@ private:
   
 public:
   mpint();
+  mpint(int);
+  mpint(unsigned);
   mpint(long);
   mpint(unsigned long);
-  mpint(double);
-  mpint(char const *);
+  mpint(std::string const &);
   mpint(mpint const &);
   ~mpint();
   mpint &operator = (long);
@@ -36,9 +37,11 @@ public:
   mpint &operator %= (mpint const &);
 
   std::string to_string() const;
-  
+  std::string to_hex() const;
 private:
   void make_zero();
+  void make_from_digit(Digit);
+  void normalize();
 };
 
 #endif
