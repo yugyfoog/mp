@@ -50,8 +50,54 @@ void test_mpint_constructors() {
   cout << q << endl;
 }
 
+void test_mpint_assignment() {
+  mpint a, b, c, d;
+  int dd;
+  mpint e, f;
+  mpint g, h, i, j;
+  long jj;
+  mpint k, l;
+  mpint m;
+  
+  a = -5;
+  cout << a << endl;
+  b = 0;
+  cout << b << endl;
+  c = 5;
+  cout << c << endl;
+  dd = -2147483648;
+  d = dd;
+  cout << d << endl;
+
+  e = 0u;
+  cout << e << endl;
+  f = 5u;
+  cout << f << endl;
+
+  g = -5l;
+  cout << g << endl;
+  h = 0l;
+  cout << h << endl;
+  i = 5l;
+  cout << i << endl;
+  jj = 0x8000000000000000;
+  j = jj;
+  cout << j << endl;
+
+  k = 0ul;
+  cout << k << endl;
+  l = 5ul;
+  cout << l << endl;
+
+  mpint mm("15226050279225333605356183781326374297180681149613"
+	  "80688657908494580122963258952897654000350692006139");
+  m = mm;
+  cout << m << endl;
+}
+
 void test_mpint() {
   test_mpint_constructors();
+  test_mpint_assignment();
 }
 
 void test_mpfloat() {

@@ -12,47 +12,19 @@ mpint::mpint() {
 };
 
 mpint::mpint(int x) {
-  if (x == 0)
-    make_zero();
-  else if (x < 0) {
-    make_from_digit(-(long)x);
-    sign = -1;
-  }
-  else {
-    make_from_digit(x);
-    sign = 1;
-  }
+  make_from_int(x);
 }
 
 mpint::mpint(unsigned x) {
-  if (x == 0)
-    make_zero();
-  else {
-    make_from_digit(x);
-    sign = 1;
-  }
+  make_from_unsigned(x);
 }
 
 mpint::mpint(long x) {
-  if (x == 0)
-    make_zero();
-  else if (x < 0) {
-    make_from_digit(-x);
-    sign = -1;
-  }
-  else {
-    make_from_digit(x);
-    sign = 1;
-  }
+  make_from_long(x);
 }
 
 mpint::mpint(unsigned long x) {
-  if (x == 0)
-    make_zero();
-  else {
-    make_from_digit(x);
-    sign = 1;
-  }
+  make_from_unsigned_long(x);
 }
 
 mpint::mpint(string const &x) {
@@ -74,6 +46,10 @@ mpint::mpint(string const &x) {
 }
 
 mpint::mpint(mpint const &x) {
+  copy(x);
+}
+
+void mpint::copy(mpint const &x) {
   if (x.sign == 0)
     make_zero();
   else {
@@ -92,6 +68,50 @@ void mpint::make_zero() {
   sign = 0;
   size = 0;
   digits = 0;
+}
+
+void mpint::make_from_int(int x) {
+  if (x == 0)
+    make_zero();
+  else if (x < 0) {
+    make_from_digit(-(long)x);
+    sign = -1;
+  }
+  else {
+    make_from_digit(x);
+    sign = 1;
+  }
+}
+
+void mpint::make_from_unsigned(unsigned x) {
+  if (x == 0)
+    make_zero();
+  else {
+    make_from_digit(x);
+    sign = 1;
+  }
+}
+
+void mpint::make_from_long(long x) {
+  if (x == 0)
+    make_zero();
+  else if (x < 0) {
+    make_from_digit(-x);
+    sign = -1;
+  }
+  else {
+    make_from_digit(x);
+    sign = 1;
+  }
+}
+
+void mpint::make_from_unsigned_long(unsigned long x) {
+  if (x == 0)
+    make_zero();
+  else {
+    make_from_digit(x);
+    sign = 1;
+  }
 }
 
 void mpint::make_from_digit(Digit x) {
@@ -114,6 +134,39 @@ void mpint::normalize() {
   }
   else
     size = dptr - digits;
+}
+
+mpint &mpint::operator = (int x) {
+  delete [] digits;
+  make_from_int(x);
+  return *this;
+}
+
+mpint &mpint::operator = (unsigned x) {
+  delete [] digits;
+  make_from_unsigned(x);
+  return *this;
+}
+
+mpint &mpint::operator = (long x) {
+  delete [] digits;
+  make_from_long(x);
+  return *this;
+}
+
+
+mpint &mpint::operator = (unsigned long x) {
+  delete [] digits;
+  make_from_unsigned_long(x);
+  return *this;
+}
+
+mpint &mpint::operator = (mpint const &x) {
+  if (this != &x) {
+    delete [] digits;
+    copy(x);
+  }
+  return *this;
 }
 
 string mpint::to_string() const {
