@@ -95,9 +95,39 @@ void test_mpint_assignment() {
   cout << m << endl;
 }
 
+void test_mpint_addition() {
+  mpint a("1234567890123456789012345678901234567890");
+  mpint b("9876543210987654321098765432109876543210");
+
+  mpint c = a + b;
+  cout << c << endl;
+
+  mpint d("-555555555555555555555555555555555555555555555555555555555555555555555");
+  mpint e("444444444444444444444444444444444444444444444444444444444444444444444");
+  mpint f = d + e;
+  mpint g = e + d;
+  cout << f << endl;
+  cout << g << endl;
+
+  mpint h("55555555555555555555555555555555555555555555555555555555555555555555555");
+  mpint i("-55555555555555555555555555555555555");
+  mpint j = h + i;
+  mpint k = i + h;
+  cout << j << endl;
+  cout << k << endl;
+
+  mpint l("1234567890123456789012345678901234567890123456789012345678901234567890123456789");
+  mpint m("-1234567890123456789012345678901234567890123456789012345678901234567890123456789");
+  mpint n = l + m;
+  mpint o = m + l;
+  cout << n << endl;
+  cout << o << endl;
+}
+
 void test_mpint() {
   test_mpint_constructors();
   test_mpint_assignment();
+  test_mpint_addition();
 }
 
 void test_mpfloat() {

@@ -11,6 +11,12 @@ class mpfloat;
 #include "mpint.h"
 #include "mpfloat.h"
 
+inline mpint operator + (mpint &x, mpint &y) {
+  mpint z(x);
+  z.add(y);
+  return z;
+}
+  
 std::ostream &operator << (std::ostream &, mpint const &);
 
 #endif

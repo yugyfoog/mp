@@ -123,17 +123,18 @@ void mpint::make_from_digit(Digit x) {
 
 void mpint::normalize() {
   Digit *dptr;
-  
-  for (dptr = digits + size; dptr != digits; dptr--) {
-    if (*dptr != 0)
-      break;
+  if (size) {
+    for (dptr = digits + size - 1; dptr >= digits; dptr--) {
+      if (*dptr != 0)
+	break;
+    }
+    if (dptr < digits) {
+      delete [] digits;
+      make_zero();
+    }
+    else
+      size = dptr - digits + 1;
   }
-  if (dptr == digits) {
-    delete [] digits;
-    make_zero();
-  }
-  else
-    size = dptr - digits;
 }
 
 mpint &mpint::operator = (int x) {
@@ -201,3 +202,81 @@ string mpint::to_hex() const {
   ss << endl;
   return ss.str();
 }
+
+bool mpint::iszero() const {
+  return sign == 0;
+}
+
+mpint &mpint::add(mpint const &x) {
+  if (x.iszero())
+    ;
+  else if (iszero()) {
+    delete [] digits;
+    copy(x);
+  }
+  else if (sign == x.sign)
+    abs_add(x);
+  else {
+    int t = abs_compare(x);
+    if (t == 0) {
+      make_zero();
+      return *this;
+    }
+    else if (t < 0) { /* this < x */
+      abs_subtract_reverse(x);
+      sign = x.sign;
+    }
+    else
+      abs_subtract(x);
+  }
+  normalize();
+  return *this;
+}
+
+int mpint::abs_compare(mpint const &x) const {
+  if (size < x.size)
+    return -1;
+  if (size > x.size)
+    return 1;
+  return fast_compare(digits, x.digits, size);
+}
+
+mpint &mpint::abs_add(mpint const &x) {
+  Digit *new_digits;
+
+  cout << "size = " << size << ", " << x.size << endl;
+  
+  if (size >= x.size) {
+    new_digits = new Digit[size+1];
+    Digit k = fast_add(new_digits, digits, x.digits, x.size, 0);
+    new_digits[size] = fast_carry(new_digits+x.size, digits+x.size, size - x.size, k);
+    size++;
+  }
+  else {
+    new_digits = new Digit[x.size+1];
+    Digit k = fast_add(new_digits, digits, x.digits, size, 0);
+    new_digits[x.size] = fast_carry(new_digits+size, x.digits+size, x.size - size, k);
+    size = x.size+1;
+  }
+  delete [] digits;
+  digits = new_digits;
+  return *this;
+}
+      
+mpint &mpint::abs_subtract(mpint const &x) {
+  Digit k = fast_subtract(digits, digits, x.digits, x.size, 0);
+  fast_borrow(digits+x.size, digits+x.size, size - x.size, k);
+  return *this;
+}
+  
+mpint &mpint::abs_subtract_reverse(mpint const &x) {
+  Digit *new_digits = new Digit[x.size];
+  SDigit k = fast_subtract(new_digits, x.digits, digits, size, 0);
+  fast_borrow(new_digits+size, x.digits+size, x.size - size, k);
+  delete [] digits;
+  digits = new_digits;
+  size = x.size;
+  return *this;
+}
+
+  

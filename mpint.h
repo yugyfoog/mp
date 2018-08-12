@@ -17,6 +17,7 @@ public:
   mpint(std::string const &);
   mpint(mpint const &);
   ~mpint();
+
   mpint &operator = (int);
   mpint &operator = (unsigned);
   mpint &operator = (long);
@@ -24,7 +25,7 @@ public:
   mpint &operator = (mpint const &);
   mpint &operator += (long);
   mpint &operator += (unsigned long);
-  mpint &operator += (mpint const &);
+  mpint &operator += (mpint const &x) { return add(x); }
   mpint &operator -= (long);
   mpint &operator -= (unsigned long);
   mpint &operator -= (mpint const &);
@@ -38,6 +39,10 @@ public:
   mpint &operator %= (unsigned long);
   mpint &operator %= (mpint const &);
 
+  bool iszero() const;
+  
+  mpint &add(mpint const &);
+  
   std::string to_string() const;
   std::string to_hex() const;
 private:
@@ -49,6 +54,11 @@ private:
   void make_from_unsigned_long(unsigned long);
   void make_from_digit(Digit);
   void normalize();
+
+  int abs_compare(mpint const &) const;
+  mpint &abs_add(mpint const &);
+  mpint &abs_subtract(mpint const &);
+  mpint &abs_subtract_reverse(mpint const &);
 };
 
 #endif

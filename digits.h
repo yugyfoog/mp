@@ -5,5 +5,6 @@
 
 typedef unsigned long Digit;
 typedef unsigned int Digit2;
+typedef signed long SDigit;
 
 #endif
