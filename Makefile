@@ -1,12 +1,16 @@
-CFLAGS = -Wall -g -O3
-CXXFLAGS = -Wall -g -O3
+CXXFLAGS = -Wall -Wextra -g -Ofast
+CFLAGS = -Wall -Wextra -g -Ofast
+ASFLAGS = -g
 
-HEADERS = mp.h mpint.h mpfloat.h digits.h fast.h
+MPLIB = mp.o fast.o multiply.o schoolboy.o
+MPHEAD = mp.h fast.h multiply.h schoolboy.h
 
-mptest: mptest.o mpint.o mp.o fast.o
-	g++ -o mptest mptest.o mpint.o mp.o fast.o
+all: mptest
 
-mptest.o: $(HEADERS)
+mptest: mptest.o $(MPLIB)
+	g++ -g -o mptest mptest.o $(MPLIB)
 
-clean:
-	rm -f *.o *~ *.stackdump
+mptest.o: $(MPHEAD)
+
+$(MPLIB): $(MPHEAD)
+
