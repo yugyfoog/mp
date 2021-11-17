@@ -2,7 +2,6 @@
   
 typedef unsigned long Digit;
   
-// #include "mynew.h"
 #include "fast.h"
 #include "multiply.h"
 #include "schoolboy.h"

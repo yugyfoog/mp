@@ -5,12 +5,15 @@ ASFLAGS = -g
 MPLIB = mp.o fast.o multiply.o schoolboy.o
 MPHEAD = mp.h fast.h multiply.h schoolboy.h
 
-all: mptest
+all: mptest chudnovsky
 
 mptest: mptest.o $(MPLIB)
 	g++ -g -o mptest mptest.o $(MPLIB)
 
-mptest.o: $(MPHEAD)
+chudnovsky: chudnovsky.o $(MPLIB)
+	g++ -g -o chudnovsky chudnovsky.o $(MPLIB)
 
-$(MPLIB): $(MPHEAD)
+mptest.o chudnovsky.o $(MPLIB): $(MPHEAD)
 
+clean:
+	rm -f *.o *.~

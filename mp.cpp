@@ -1,6 +1,6 @@
-#include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <stdexcept>
 #include <bit>
 #include <cstdint>
 #include <cmath>
@@ -21,12 +21,6 @@ mpint::mpint(long x) {
   else
     make_from_digit(x);
 }
-
-// problems with this routine:
-//     SLOW
-//     doesn't handle different bases
-//     no error checking
-//        (but it shouldn't crash or anything)
 
 mpint::mpint(std::string const &s) {
   mpint x;
@@ -374,12 +368,8 @@ mpint &mpint::multiply(mpint const &x) {
 }
 
 mpint &mpint::divide(long x) {
-  if (x == 0) {
-    mperror("division by zero");
-    delete [] digits;
-    make_zero();
-    return *this;
-  }
+  if (x == 0)
+    throw std::runtime_error("division by zero");
   if (sign == 0)
     return *this;
   Digit u;
@@ -433,6 +423,9 @@ mpint_div div(mpint const &x, mpint const &y) {
   mpint_div rv = { mpint(x.sign*y.sign, m + 1, q),
                      mpint(x.sign*y.sign, y.size, xd) };
   delete [] yd;
+  delete [] xd;
+  delete [] q;
+  
   return rv; // should use pointers? too much coping?
 }
 
@@ -1003,12 +996,8 @@ mpfloat &mpfloat::multiply(mpfloat const &x) {
 }
 
 mpfloat &mpfloat::divide(long x) {
-  if (x == 0) {
-    mperror("divide by zero");
-    delete [] digits;
-    make_zero();
-    return *this;
-  }
+  if (x == 0)
+    throw std::runtime_error("division by zero");
   if (sign == 0)
     return *this;
   Digit u;
@@ -1035,12 +1024,8 @@ mpfloat &mpfloat::divide(long x) {
 }
 
 mpfloat &mpfloat::divide(mpfloat const &x) {
-  if (x.sign == 0) {
-    mperror("division by zero");
-    delete [] digits;
-    make_zero();
-    return *this;
-  }
+  if (x.sign == 0)
+    throw std::runtime_error("division by zero");
   if (sign == 0)
     return *this;
   return multiply(::inverse(x));
@@ -1206,10 +1191,9 @@ std::string mpfloat::format_scientific(long prec, char decimal, bool trim) const
     d++;
   }
   std::ostringstream s;
-  s << x.format_fixed(prec, decimal, false) << "e" << d;
+  s << x.format_fixed(prec, decimal, false) << 'e' << d;
   return s.str();
 }
-
 
 std::string mpfloat::format_default(long prec, char decimal) const {
   if (sign == 0)
@@ -1377,7 +1361,3 @@ std::ostream &operator << (std::ostream &out, mpfloat const &x) {
   return out;
 }
 
-void mperror(std::string const &s) {
-  std::cerr << "mplib error: " << s << std::endl;
-  exit(1);
-}
